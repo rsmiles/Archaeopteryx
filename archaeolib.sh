@@ -7,7 +7,7 @@ then
 	mkdir $TRASH
 fi
 
-timestamp(){
+tstmp(){
 	stamp=$(date +'%Y-%m-%d-%H-%M-%S-%N')
 	if [ $# -eq 0 ]
 	then
@@ -36,7 +36,7 @@ trash(){
 	do
 		if [ -e "$TRASH"/"$file" ]
 		then
-			mv $file "$TRASH"/"$(timestamp $file)"
+			mv $file "$TRASH"/"$(tstmp $file)"
 		else
 			mv $file $TRASH/
 		fi
@@ -57,7 +57,7 @@ lspart(){
 	lsblk -l $1 | tr ' \t' '\t' | cut -f 1 | tail -n +3
 }
 
-simpleformat(){
+sfmt(){
 	dev=$1
 	name=$2
 	parted $dev mklabel msdos
