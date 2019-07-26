@@ -43,7 +43,7 @@ trash(){
 	done
 }
 
-emptytrash(){
+rmtrash(){
 	if [ -z $TRASH ]
 	then
 	    echo "$0"': Error: TRASH environment variable not set' >&2

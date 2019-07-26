@@ -10,7 +10,7 @@ then
 fi
 
 echo 'Installing archaeolib...'
-install -o 'root' -g 'root' -m 755 -t $dir
+install -o 'root' -g 'root' -m 755 archaeolib.sh  $dir
 
 echo 'Archaeopteryx installation complete'
 
