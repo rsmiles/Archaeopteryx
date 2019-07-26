@@ -53,11 +53,19 @@ emptytrash(){
 	rm $TRASH/*
 }
 
+lspart(){
+	lsblk -l $1 | tr ' \t' '\t' | cut -f 1 | tail -n +3
+}
+
 simpleformat(){
 	dev=$1
 	name=$2
 	parted $dev mklabel msdos
 	parted -a opt $dev mkpart primary fat32 0% 100%
 
-	mkfs.fat -L $name -F 32 $dev
+	dir=$(dirname $dev)
+	part=$(lspart)
+
+	mkfs.fat -L $name -F 32 "$dir"/"$part"
 }
+
