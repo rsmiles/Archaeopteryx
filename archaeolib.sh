@@ -1,12 +1,19 @@
-# A library of useful shell functions for inclusion in .bashrc files
+# A library of useful shell functions for placement in /etc/profile.d
 
-export TRASH="/home/$(whoami)/Trash"
+export TRASH="/home/$(whoami)/Trash" # trash environment variable
+
+if [ ! -d "/home/$(whoami)" ]
+then
+	mkdir "/home/$(whoami)" # create home directory if it doesn't exist
+fi
 
 if [ ! -d $TRASH ]
 then
-	mkdir $TRASH
+	mkdir $TRASH # create trash directory if it doesn't exist
 fi
 
+# tstmp [str]
+# Timestamp. Outputs a timestamp string. If str is specified, append the timestamp to str.
 tstmp(){
 	stamp=$(date +'%Y-%m-%d-%H-%M-%S-%N')
 	if [ $# -eq 0 ]
@@ -20,16 +27,18 @@ tstmp(){
 	fi
 }
 
+# trash file ...
+# move all files into the trash directory. Files with duplicate names have timestamps appended to them.
 trash(){
 	if [ -z "$TRASH" ]
 	then
-		echo "$0"': Error: TRASH environment variable not set' >&2
-		exit 1
+		echo "trash: Error: TRASH environment variable not set" >&2
+		return 1
 	fi
 
 	if [ $# -eq 0 ]
 	then
-		echo "$0"': Missing target files' >&2
+		echo "trash: Missing target files" >&2
 	fi
 
 	for file in "$@"
@@ -43,23 +52,48 @@ trash(){
 	done
 }
 
+# rmtrash
+# rm all files in the trash directory
 rmtrash(){
 	if [ -z $TRASH ]
 	then
-	    echo "$0"': Error: TRASH environment variable not set' >&2
-	    exit 1
+	    echo "rmtrash: Error: TRASH environment variable not set" >&2
+	    return 1
 	fi
 
 	rm $TRASH/*
 }
 
+# lspart dev
+# lists all partitions on device dev, with no other information.
 lspart(){
+	if [ $# -eq 0 ]
+	then
+		echo "lsdev: Missing target device" >&2
+	fi
 	lsblk -l $1 | tr ' \t' '\t' | cut -f 1 | tail -n +3
 }
 
-sfmt(){
+# sfmt dev name
+# Simple device format. Creates a single partition, fat32 filesystem on dev, naming it name.
+sdfmt(){
+	if [ $# -ne 2 ]
+	then
+		echo "usage: sfmt device name" >&2
+		return 1
+	fi
+
 	dev=$1
 	name=$2
+
+	echo "WARNING: This will erase all data on $dev. Enter 'yes' to continue, enter any other value to exit"
+
+	read input
+	if [ $input != 'yes' ]
+	then
+		return 1
+	fi
+
 	parted $dev mklabel msdos
 	parted -a opt $dev mkpart primary fat32 0% 100%
 
