@@ -64,8 +64,8 @@ sfmt(){
 	parted -a opt $dev mkpart primary fat32 0% 100%
 
 	dir=$(dirname $dev)
-	part=$(lspart)
+	part=$(lspart $dev)
 
-	mkfs.fat -L $name -F 32 "$dir"/"$part"
+	mkfs.fat -n $name -F 32 "$dir"/"$part"
 }
 
