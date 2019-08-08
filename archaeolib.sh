@@ -104,6 +104,12 @@ sdfmt(){
 }
 
 readpass(){
+	if [ -z "$1" ]
+	then
+		echo 'readpass: usage: readpass variable' >&2
+		return 1
+	fi
+
 	stty -echo
 	while [ true ]
 	do
