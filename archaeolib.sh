@@ -103,3 +103,23 @@ sdfmt(){
 	mkfs.fat -n $name -F 32 "$dir"/"$part"
 }
 
+readpass(){
+	stty -echo
+	while [ true ]
+	do
+		echo 'Enter password:'
+		read _password
+		echo 'Re-enter password:'
+		read _password2
+		if [ $_password = $_password2 ]
+		then
+			echo $_password
+			unset _password
+			unset _password2
+			break
+		fi
+		echo 'Passwords do not match. Try Again.'
+	done
+	stty echo
+}
+
