@@ -108,14 +108,14 @@ readpass(){
 	while [ true ]
 	do
 		echo 'Enter password:'
-		read _password
+		read __archaeolib_password
 		echo 'Re-enter password:'
-		read _password2
-		if [ $_password = $_password2 ]
+		read __archaeolib_password2
+		if [ $__archaeolib_password = $__archaeolib_password2 ]
 		then
-			echo $_password
-			unset _password
-			unset _password2
+			eval "$1=$__archaeolib_password"
+			unset __archaeolib_password
+			unset __archaeolib_password2
 			break
 		fi
 		echo 'Passwords do not match. Try Again.'
