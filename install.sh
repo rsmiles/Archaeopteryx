@@ -1,8 +1,8 @@
 #!/bin/sh
 
-. archaeolib.sh
+. ./archaeolib.sh
 
-install-archaeolib(){
+install_archaeolib(){
 	dir='/etc/profile.d/'
 
 	echo 'Installing archaeolib...'
@@ -17,7 +17,7 @@ install-archaeolib(){
 	echo 'Archaeolib installed'
 }
 
-install-msmtp(){
+install_msmtp(){
 
 	echo 'checking for msmtp...'
 	if [ -z "$(which msmtp)" ]
@@ -42,12 +42,14 @@ auth on
 user $email
 passwordeval gpg --no-tty -q -d /etc/msmtp-gmail.gpg
 account default : gmail" > /etc/msmtprc
+chmod 444 /etc/msmtprc
 
-echo $password | gpg --encrypt -o /etc/msmtp-gmail.gpg -r $email -
+echo $password | gpg --encrypt -o /etc/msmtp-gmail.gpg -r $(whoami) -
+chmod 444 /etc/msmtp-gmail.gpg
 }
 
 echo 'Starting Archaeopteryx installation...'
-install-archaeolib
-postfix
+install_archaeolib
+install_msmtp
 echo 'Archaeopteryx installation complete'
 
