@@ -1,6 +1,8 @@
 #!/bin/sh
 
-archaeolib(){
+. archaeolib.sh
+
+install-archaeolib(){
 	dir='/etc/profile.d/'
 
 	echo 'Installing archaeolib...'
@@ -15,55 +17,37 @@ archaeolib(){
 	echo 'Archaeolib installed'
 }
 
-postfix(){
-	echo 'Installing postfix...'
+install-msmtp(){
 
-	apt-get -y install postfix mailutils libsasl2-2 ca-certificates libsasl2-modules
+	echo 'checking for msmtp...'
+	if [ -z "$(which msmtp)" ]
+	then
+		echo 'msmtp not found, installing now...'
+		sudo apt-get -y install msmtp
+	fi
 
-	echo 'Postfix installed'
-	echo 'Configuring postfix...'
-
-	echo 'relayhost = [smtp.gmail.com]:587
-smtp_sasl_auth_enable = yes
-smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
-inet_interfaces = smtp_sasl_security_options = noanonymous
-inet_protocols = smtp_tls_CAfile = /etc/cacert.pem
-smtp_use_tls = yes' > /etc/postfix/main.cf
-
-	echo 'Enter email address: '
+	echo 'Configuring msmtp...'
+	echo 'Enter email user name:'
 	read email
+	readpass password
 
-	stty -echo
-	while [ true ]
-	do
-		echo 'enter email password:'
-		read password
-		echo 're-enter password:'
-		read password2
-		if [ "$password" == "$password2" ]
-		then
-			break
-		fi
-		echo 'Passwords do not match. Try again.'
-	done
-	stty echo
+	echo "defaults
+port 587
+tls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+account gmail
+host smtp@gmail.com
+from $email
+auth on
+user $email
+passwordeval gpg --no-tty -q -d /etc/msmtp-gmail.gpg
+account default : gmail" > /etc/msmtprc
 
-	echo "[smtp.gmail.com]:587	""$email"":""$PASSWORD" > /etc/postfix/sasl_passwd
-	chmod 400 /etc/postfix/sasl_passwd
-	postmap /etc/postfix/sasl_passwd
-
-	# Fix this later
-	cat /etc/ssl/certs/Thawte_Premium_Server_CA.pem | sudo tee -a /etc/postfix/cacert.pem
-
-	echo 'Postfix configured'
-	echo 'Restarting postfix....'
-	systemctl restart postfix
-	echo 'Postfix restarted'
+echo $password | gpg --encrypt -o /etc/msmtp-gmail.gpg -r $email -
 }
 
-
 echo 'Starting Archaeopteryx installation...'
-archaeolib
+install-archaeolib
 postfix
 echo 'Archaeopteryx installation complete'
 
