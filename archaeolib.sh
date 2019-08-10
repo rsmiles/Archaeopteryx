@@ -12,6 +12,19 @@ then
 	mkdir $TRASH # create trash directory if it doesn't exist
 fi
 
+# assert [mesg]
+# Assert that the last command ran successfully. If not, print mesg and exit with status 1.
+assert(){
+	if [ $? -ne 0 ]
+	then
+		if [ ! -z "$1" ]
+		then
+			echo $1 >&2
+		fi
+		exit 1
+	fi
+}
+
 # tstmp [str]
 # Timestamp. Outputs a timestamp string. If str is specified, append the timestamp to str.
 tstmp(){
@@ -103,6 +116,8 @@ sdfmt(){
 	mkfs.fat -n $name -F 32 "$dir"/"$part"
 }
 
+# readpass variable [prompt1] [prompt2] [retry_prompt]
+# Prompt user for a password and read it into variable
 readpass(){
 	if [ -z "$1" ]
 	then
