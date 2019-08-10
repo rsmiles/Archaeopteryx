@@ -106,17 +106,31 @@ sdfmt(){
 readpass(){
 	if [ -z "$1" ]
 	then
-		echo 'readpass: usage: readpass variable' >&2
+		echo 'readpass: usage: readpass variable [prompt1] [prompt2] [retry_prompt]' >&2
 		return 1
 	fi
 
 	stty -echo
 	while [ true ]
 	do
-		echo 'Enter password:'
+		if [ ! -z "$2" ]
+		then
+			echo $2
+		else
+			echo 'Enter password:'
+		fi
 		read __archaeolib_password
-		echo 'Re-enter password:'
+
+		
+		if [ ! -z "$3" ]
+		then
+			echo $3
+		else
+			echo 'Re-enter password:'
+
+		fi
 		read __archaeolib_password2
+
 		if [ $__archaeolib_password = $__archaeolib_password2 ]
 		then
 			eval "$1=$__archaeolib_password"
@@ -124,7 +138,13 @@ readpass(){
 			unset __archaeolib_password2
 			break
 		fi
-		echo 'Passwords do not match. Try Again.'
+
+		if [ ! -z "$4" ]
+		then
+			echo $4
+		else
+			echo 'Passwords do not match. Try Again.'
+		fi
 	done
 	stty echo
 }
