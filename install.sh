@@ -17,6 +17,10 @@ install_archaeolib(){
 	echo 'Archaeolib installed'
 }
 
+setup_user(){
+	adduser --system --group archaeopteryx
+}
+
 install_msmtp(){
 
 	echo 'checking for msmtp...'
@@ -29,7 +33,7 @@ install_msmtp(){
 	echo 'Configuring msmtp...'
 	echo 'Enter email user name:'
 	read email
-	readpass password
+	readpass password 'Enter email password:'
 
 	echo "defaults
 port 587
@@ -47,6 +51,8 @@ chmod 444 /etc/msmtprc
 echo $password | gpg --encrypt -o /etc/msmtp-gmail.gpg -r $(whoami) -
 chmod 444 /etc/msmtp-gmail.gpg
 }
+
+ARCHAEOPTERYX_USER='archaeopteryx'
 
 echo 'Starting Archaeopteryx installation...'
 install_archaeolib
