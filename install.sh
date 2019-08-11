@@ -22,7 +22,8 @@ install_archaeolib(){
 }
 
 setup_user(){
-	adduser --system --group archaeopteryx
+	echo 'creating archaeopteryx user...'
+	adduser archaeopteryx
 }
 
 install_msmtp(){
@@ -38,18 +39,22 @@ install_msmtp(){
 	read email
 	readpass password 'Enter email password:'
 
+	echo "writing /home/$ARCHAEOPTERYX_USER/.msmtprx"
 	echo "defaults
-port 587
 tls on
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
-account gmail
-host smtp@gmail.com
-from $email
 auth on
+logfile ~/.msmtp.log
+
+account gmail
+host smtp.gmail.com
+port 587
+from $email
 user $ARCHAEOPTERYX_USER
-passwordeval gpg --no-tty -q -d /etc/msmtp-gmail.gpg
-account default : gmail" > /home/$ARCHAEOPTERYX_USER/msmtprc
-	chmod 600 /home/$ARCHAEOPTERYX_USER/msmtprc
+password $password
+account default : gmail" > /home/$ARCHAEOPTERYX_USER/.msmtprc
+	chown $ARCHAEOPTERYX_USER /home/$ARCHAEOPTERYX_USER/.msmtprc
+	chmod 600 /home/$ARCHAEOPTERYX_USER/.msmtprc
 }
 
 echo 'Starting Archaeopteryx installation...'
