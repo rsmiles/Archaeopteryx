@@ -50,7 +50,7 @@ account gmail
 host smtp.gmail.com
 port 587
 from $email
-user $ARCHAEOPTERYX_USER
+user $email
 password $password
 account default : gmail" > /home/$ARCHAEOPTERYX_USER/.msmtprc
 	chown $ARCHAEOPTERYX_USER /home/$ARCHAEOPTERYX_USER/.msmtprc
