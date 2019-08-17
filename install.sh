@@ -3,27 +3,20 @@
 . ./archaeolib.sh
 
 ARCHAEOPTERYX_USER='archaeopteryx'
-
-install_archaeolib(){
-	dir='/etc/profile.d/'
-
-	echo 'Installing archaeolib...'
-	echo "Ensuring $dir exists..."
-
-	if [ ! -d $dir ]
-	then
-		echo "Creating $dir..."
-		mkdir $dir
-	fi
-
-	echo "moving archaeolib to $dir"
-	install -o 'root' -g 'root' -m 755 archaeolib.sh  $dir
-	echo 'Archaeolib installed'
-}
+ARCHAEOPTERYX_HOME="/home/$ARCHAEOPTERYX_USER/"
 
 setup_user(){
 	echo 'creating archaeopteryx user...'
 	adduser archaeopteryx
+}
+
+install_archaeolib(){
+
+	echo 'Installing archaeolib...'
+
+	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 archaeolib.sh "$ARCHAEOPTERYX_HOME/.archaeolib.sh"
+	echo '. ~/.archaeolib.sh' >> $ARCHAEOPTERYX_HOME/.profile
+	echo 'Archaeolib installed'
 }
 
 install_msmtp(){
@@ -52,14 +45,14 @@ port 587
 from $email
 user $email
 password $password
-account default : gmail" > /home/$ARCHAEOPTERYX_USER/.msmtprc
-	chown $ARCHAEOPTERYX_USER /home/$ARCHAEOPTERYX_USER/.msmtprc
-	chmod 600 /home/$ARCHAEOPTERYX_USER/.msmtprc
+account default : gmail" > $ARCHAEOPTERYX_HOME/.msmtprc
+	chown $ARCHAEOPTERYX_USER $ARCHAEOPTERYX_HOME/.msmtprc
+	chmod 600 $ARCHAEOPTERYX_HOME/.msmtprc
 }
 
 echo 'Starting Archaeopteryx installation...'
-install_archaeolib
 setup_user
+install_archaeolib
 install_msmtp
 echo 'Archaeopteryx installation complete'
 
