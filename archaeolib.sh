@@ -165,7 +165,7 @@ readpass(){
 }
 
 ips(){
-	echo "Internal:	$(ip route show | head -n 1 | cut -d ' ' -f 3)"
-	echo "External:	$(curl -s http://whatismyip.akamai.com/)"
+	echo "Internal:	$(ip route show | head -n 1 | cut -d ' ' -f 3)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+	echo "External:	$(curl -s http://whatismyip.akamai.com/)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
 }
 
