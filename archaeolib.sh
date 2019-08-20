@@ -164,10 +164,6 @@ readpass(){
 	stty echo
 }
 
-netup(){
-
-}
-
 ips(){
 	echo "Internal:	$(ip route show | head -n 1 | cut -d ' ' -f 3)"
 	echo "External:	$(curl -s http://whatismyip.akamai.com/)"
