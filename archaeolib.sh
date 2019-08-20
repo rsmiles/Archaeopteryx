@@ -66,7 +66,7 @@ trash(){
 }
 
 # rmtrash
-# rm all files in the trash directory
+# rm all files in the trash directory.
 rmtrash(){
 	if [ -z $TRASH ]
 	then
@@ -117,7 +117,7 @@ sdfmt(){
 }
 
 # readpass variable [prompt1] [prompt2] [retry_prompt]
-# Prompt user for a password and read it into variable
+# Prompt user for a password and read it into variable.
 readpass(){
 	if [ -z "$1" ]
 	then
@@ -164,6 +164,9 @@ readpass(){
 	stty echo
 }
 
+# ips
+# If there is a network connection, print the internal and external ip addresses of this machine and set $? to 0.
+# If there is no network connection, print nothing and set $? to 1.
 ips(){
 	echo "Internal:	$(ip route show | head -n 1 | cut -d ' ' -f 3)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
 	echo "External:	$(curl -s http://whatismyip.akamai.com/)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
