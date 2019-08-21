@@ -1,16 +1,4 @@
-# A library of useful shell functions for placement in /etc/profile.d
-
-export TRASH="/home/$(whoami)/Trash" # trash environment variable
-
-if [ ! -d "/home/$(whoami)" ]
-then
-	mkdir "/home/$(whoami)" # create home directory if it doesn't exist
-fi
-
-if [ ! -d $TRASH ]
-then
-	mkdir $TRASH # create trash directory if it doesn't exist
-fi
+# A library of useful shell functions
 
 # assert [mesg]
 # Assert that the last command ran successfully. If not, print mesg and exit with status 1.
@@ -162,5 +150,17 @@ readpass(){
 		fi
 	done
 	stty echo
+}
+
+# notify subject message
+# Send email to archaeopteryx email account with specified subject and message
+notify(){
+	if [ $# -ne 2 ]
+	then
+		echo 'notify: usage: notify subject message' >&2
+	fi
+
+	echo "subject: $1
+$2" | msmtp $NOTIFY_EMAIL
 }
 

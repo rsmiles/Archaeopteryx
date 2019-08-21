@@ -11,6 +11,14 @@ setup_user(){
 }
 
 install_archaeolib(){
+	echo 'Setting up trash directory...'
+	if [ ! -d $ARCHAEOPTERYX_HOME/.Trash ]
+	then
+		mkdir $ARCHAEOPTERYX_HOME/.Trash
+		chown $ARCHAEOPTERYX_USER:$ARCHAEOPTERYX_USER $ARCHAEOPTERYX_HOME/.Trash
+	fi
+	echo "export TRASH=~/.Trash" >> $ARCHAEOPTERYX_HOME/.profile
+	echo 'Trash directory set'
 
 	echo 'Installing archaeolib...'
 
@@ -48,6 +56,10 @@ password $password
 account default : gmail" > $ARCHAEOPTERYX_HOME/.msmtprc
 	chown $ARCHAEOPTERYX_USER $ARCHAEOPTERYX_HOME/.msmtprc
 	chmod 600 $ARCHAEOPTERYX_HOME/.msmtprc
+
+	echo 'Saving notify email variable...'
+	echo "export NOTIFY_EMAIL=$email" >> $ARCHAEOPTERYX_HOME/.profile
+	echo 'Notify email saved'
 }
 
 echo 'Starting Archaeopteryx installation...'
