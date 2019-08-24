@@ -4,6 +4,7 @@
 
 ARCHAEOPTERYX_USER='archaeopteryx'
 ARCHAEOPTERYX_HOME="/home/$ARCHAEOPTERYX_USER/"
+ARCHAEOPTERYX_BIN="$ARCHAEOPTERYX_HOME/.Archaeopteryx"
 
 setup_user(){
 	echo 'creating archaeopteryx user...'
@@ -17,14 +18,18 @@ install_archaeolib(){
 		mkdir $ARCHAEOPTERYX_HOME/.Trash
 		chown $ARCHAEOPTERYX_USER:$ARCHAEOPTERYX_USER $ARCHAEOPTERYX_HOME/.Trash
 	fi
-	echo "export TRASH=~/.Trash" >> $ARCHAEOPTERYX_HOME/.profile
-	echo 'Trash directory set'
+	echo "Creating $ARCHAEOPTERYX_BIN..."
+	mkdir $ARCHAEOPTERYX_BIN
+	chown $ARCHAEOPTERYX_USER:$ARCHAEOPTERYX_USER $ARCHAEOPTERYX_BIN
+	echo "$ARCHAEOPTERYX_BIN created"
 
 	echo 'Installing archaeolib...'
-
-	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 archaeolib.sh "$ARCHAEOPTERYX_HOME/.archaeolib.sh"
-	echo '. ~/.archaeolib.sh' >> $ARCHAEOPTERYX_HOME/.profile
+	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 archaeolib.sh ARCHAEOPTERYX_BIN
+	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 profile ARCHAEOPTERYX_BIN
 	echo 'Archaeolib installed'
+	echo "Updating $ARCHAEOPTERYX_USER .profile"
+	echo ". $ARCHAEOPTERYX_BIN/profile" >> $ARCHAEOPTERYX_USER/.profile
+	echo 'Done'
 }
 
 install_msmtp(){
@@ -58,13 +63,22 @@ account default : gmail" > $ARCHAEOPTERYX_HOME/.msmtprc
 	chmod 600 $ARCHAEOPTERYX_HOME/.msmtprc
 
 	echo 'Saving notify email variable...'
-	echo "export NOTIFY_EMAIL=$email" >> $ARCHAEOPTERYX_HOME/.profile
+	echo "export NOTIFY_EMAIL=$email" >> $ARCHAEOPTERYX_BIN/profile
 	echo 'Notify email saved'
+}
+
+setup_crontab(){
+	echo 'Setting up crontab...'
+	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 500 on_reboot.sh $ARCHAEOPTERYX_BIN
+	echo $ARCHAEOPTERYX_USER >> /etc/cron.allow
+	crontab -u $ARCHAEOPTERYX_USER schedule.crt
+	echo 'Crontab set'
 }
 
 echo 'Starting Archaeopteryx installation...'
 setup_user
 install_archaeolib
 install_msmtp
+setup_crontab
 echo 'Archaeopteryx installation complete'
 
