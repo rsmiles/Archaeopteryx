@@ -3,7 +3,7 @@
 . ./archaeolib.sh
 
 ARCHAEOPTERYX_USER='archaeopteryx'
-ARCHAEOPTERYX_HOME="/home/$ARCHAEOPTERYX_USER/"
+ARCHAEOPTERYX_HOME="/home/$ARCHAEOPTERYX_USER"
 ARCHAEOPTERYX_BIN="$ARCHAEOPTERYX_HOME/.Archaeopteryx"
 
 setup_user(){
@@ -24,11 +24,11 @@ install_archaeolib(){
 	echo "$ARCHAEOPTERYX_BIN created"
 
 	echo 'Installing archaeolib...'
-	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 archaeolib.sh ARCHAEOPTERYX_BIN
-	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 profile ARCHAEOPTERYX_BIN
+	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 archaeolib.sh $ARCHAEOPTERYX_BIN
+	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 profile $ARCHAEOPTERYX_BIN
 	echo 'Archaeolib installed'
 	echo "Updating $ARCHAEOPTERYX_USER .profile"
-	echo ". $ARCHAEOPTERYX_BIN/profile" >> $ARCHAEOPTERYX_USER/.profile
+	echo ". $ARCHAEOPTERYX_BIN/profile" >> $ARCHAEOPTERYX_HOME/.profile
 	echo 'Done'
 }
 

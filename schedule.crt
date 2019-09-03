@@ -1,1 +1,1 @@
-@reboot ~/.on_reboot.sh
+@reboot ~/.Archaeopteryx/on_reboot.sh

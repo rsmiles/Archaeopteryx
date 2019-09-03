@@ -1,3 +1,3 @@
-. ~/archaeolib.sh
+. ~/.Archaeopteryx/archaeolib.sh
 export TRASH=~/.Trash
 

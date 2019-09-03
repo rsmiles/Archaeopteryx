@@ -2,6 +2,8 @@
 
 . ~/.profile
 
+TIME=$(tstmp)
+
 while [ true ]
 do
 	ADDRESSES=$(ips)
@@ -9,8 +11,8 @@ do
 	then
 		break
 	fi
-	sleep 60
+	sleep 30
 done
 
-notify 'System Reboot' "Reboot completed at $(tstmp).
-$(ADDRESSES)"
+notify 'System Reboot' "Reboot completed at $TIME.
+$ADDRESSES"
