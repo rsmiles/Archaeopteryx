@@ -14,5 +14,5 @@ do
 	sleep 30
 done
 
-notify 'System Reboot' "Reboot completed at $TIME.
+notify "$(hostname) Reboot" "$(hostname) reboot completed at $TIME.
 $ADDRESSES"
