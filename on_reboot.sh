@@ -11,7 +11,7 @@ do
 	then
 		break
 	fi
-	sleep 30
+	sleep 60
 done
 
 notify "$(hostname) Reboot" "$(hostname) reboot completed at $TIME.
