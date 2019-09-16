@@ -75,10 +75,20 @@ setup_crontab(){
 	echo 'Crontab set'
 }
 
+setup_root(){
+	apt -y install clamav
+	cp $ARCHAEOPTERYX_BIN /root
+	chown root /root/.Archaeopteryx
+	echo ". /root/.Archaeopteryx/profile" >> /root/.profile
+	install -o root -g root -m 500 maintenance.sh /root/.Archaeopteryx
+	crontab -u root schedule_root.crt
+}
+
 echo 'Starting Archaeopteryx installation...'
 setup_user
 install_archaeolib
 install_msmtp
 setup_crontab
+setup_root
 echo 'Archaeopteryx installation complete'
 

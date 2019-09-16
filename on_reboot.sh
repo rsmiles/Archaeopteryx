@@ -14,5 +14,19 @@ do
 	sleep 60
 done
 
+LOG_DIR='/var/log/Archaeopteryx'
+LOG_FILE=$(ls $LOG_DIR | sort -r | head -n 1)
+
+if [ -z "$LOG_FILE" ]
+then
+	LOG_MESG='No maintenance logs available'
+else
+	LOG_MESG="Last maintenance log:
+$(cat $LOG_FILE)"
+fi
+
 notify "$(hostname) Reboot" "$(hostname) reboot completed at $TIME.
-$ADDRESSES"
+$ADDRESSES
+
+$(cat $LOG_MESG)"
+

@@ -29,7 +29,15 @@ wall 'Starting system maintenance. System restart will occur at the end.'
 
 TIME=$(tstmp)
 LOG_FILE="$LOG_DIR"/"$TIME".log
-
 touch $LOG_FILE
+chown archaeopteryx $LOG_FILE
+chmod 440 $LOG_FILE
 
+freshclam >> $LOG_FILE 2>> $LOG_FILE
+clamscan -r -i / >> $LOG_FILE 2>> $LOG_FILE
+
+apt-get -qq update >> $LOG_FILE 2>> $LOG_FILE
+apt-get -qq upgrade >> $LOG_FILE 2>> $LOG_FILE
+
+shutdown -r +30
 

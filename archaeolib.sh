@@ -168,7 +168,7 @@ $2" | msmtp $NOTIFY_EMAIL
 # If there is a network connection, print the internal and external ip addresses of this machine and set $? to 0.
 # If there is no network connection, print nothing and set $? to 1.
 ips(){
-	echo "Internal:	$(ip route show | head -n 1 | cut -d ' ' -f 3)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
-	echo "External:	$(curl -s http://whatismyip.akamai.com/)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+	echo "Internal_IP:	$(ip route show | head -n 1 | cut -d ' ' -f 3)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+	echo "External_IP:	$(curl -s http://whatismyip.akamai.com/)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
 }
 
