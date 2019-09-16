@@ -3,29 +3,36 @@
 . ~/.profile
 
 WARNING_MESG='System maintenance will begin in'
-LOG_DIR='/var/Archaeopteryx/'
+LOG_DIR='/var/log/Archaeopteryx/'
 
 wall "$WARNING_MESG 1 hour"
 
-sleep 30m
+#sleep 30m
 
 wall "$WARNING_MESG 30 minutes"
 
-sleep 20m
+#sleep 20m
 
 wall "$WARNING_MESG 10 minutes"
 
-sleep 5m
+#sleep 5m
 
 wall "$WARNING_MESG 5 minutes"
 
-sleep 4m
+#sleep 4m
 
 wall "$WARNING_MESG 1 minute"
 
-sleep 1m
+#sleep 1m
 
 wall 'Starting system maintenance. System restart will occur at the end.'
+
+if [ ! -d $LOG_DIR ]
+then
+	mkdir $LOG_DIR
+	chown $LOG_DIR archaeopteryx
+	chmod 440 $LOG_DIR
+fi
 
 TIME=$(tstmp)
 LOG_FILE="$LOG_DIR"/"$TIME".log
