@@ -55,6 +55,8 @@ account default : gmail" > /home/$1/.msmtprc
 	echo "export NOTIFY_EMAIL=$email" >> /home/$1/.Archaeopteryx/config.sh
 
 	crontab -u $1 schedule.crt
+	install_file on_reboot.sh $1
+	chmod u+x /home/$1/.Archaeopteryx/on_reboot.sh
 }
 
 install_root(){
@@ -70,6 +72,8 @@ install_root(){
 
 setup_maintenance(){
 	crontab -u root schedule_root.crt
+	install_file_root maintenance.sh
+	chmod u+x /root/.Archaeopteryx/maintenance.sh
 }
 
 dependencies
