@@ -76,4 +76,4 @@ install_system archaeopteryx
 setup_notify archaeopteryx
 install_root
 setup_maintenance
-
+echo 'Installation Complete'
