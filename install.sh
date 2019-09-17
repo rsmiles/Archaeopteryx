@@ -48,9 +48,9 @@ port 587
 from $email
 user $email
 password $password
-account default : gmail" > $ARCHAEOPTERYX_HOME/.msmtprc
-	chown $ARCHAEOPTERYX_USER $ARCHAEOPTERYX_HOME/.msmtprc
-	chmod 600 $ARCHAEOPTERYX_HOME/.msmtprc
+account default : gmail" > /home/$1/.msmtprc
+	chown $1 /home/$1/.msmtprc
+	chmod 600 /home/$1/.msmtprc
 
 	echo "export NOTIFY_EMAIL=$email" >> /home/$1/.Archaeopteryx/config.sh
 
