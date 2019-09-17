@@ -1,51 +1,40 @@
 #!/bin/sh
 
-. ./archaeolib.sh
+. lib.sh
 
-ARCHAEOPTERYX_USER='archaeopteryx'
-ARCHAEOPTERYX_HOME="/home/$ARCHAEOPTERYX_USER"
-ARCHAEOPTERYX_BIN="$ARCHAEOPTERYX_HOME/.Archaeopteryx"
-
-setup_user(){
-	echo 'creating archaeopteryx user...'
-	adduser archaeopteryx
+dependencies(){
+	apt-get -y install msmtp clamav
 }
 
-install_archaeolib(){
-	echo 'Setting up trash directory...'
-	if [ ! -d $ARCHAEOPTERYX_HOME/.Trash ]
-	then
-		mkdir $ARCHAEOPTERYX_HOME/.Trash
-		chown $ARCHAEOPTERYX_USER:$ARCHAEOPTERYX_USER $ARCHAEOPTERYX_HOME/.Trash
-	fi
-	echo "Creating $ARCHAEOPTERYX_BIN..."
-	mkdir $ARCHAEOPTERYX_BIN
-	chown $ARCHAEOPTERYX_USER:$ARCHAEOPTERYX_USER $ARCHAEOPTERYX_BIN
-	echo "$ARCHAEOPTERYX_BIN created"
-
-	echo 'Installing archaeolib...'
-	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 archaeolib.sh $ARCHAEOPTERYX_BIN
-	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 644 profile $ARCHAEOPTERYX_BIN
-	echo 'Archaeolib installed'
-	echo "Updating $ARCHAEOPTERYX_USER .profile"
-	echo ". $ARCHAEOPTERYX_BIN/profile" >> $ARCHAEOPTERYX_HOME/.profile
-	echo 'Done'
+install_file(){
+	install -o $2 -g $2 -m 644 $1 /home/$2/.Archaeopteryx/
 }
 
-install_msmtp(){
-	echo 'checking for msmtp...'
-	if [ -z "$(which msmtp)" ]
-	then
-		echo 'msmtp not found, installing now...'
-		sudo apt-get -y install msmtp
-	fi
+install_file_root(){
+	install -o root -g root -m 644 $1 /root/.Archaeopteryx/
+}
 
-	echo 'Configuring msmtp...'
+install_system(){
+	if [ ! id $1 ]
+	then
+		adduser $1
+	fi
+	mkdir /home/$1/.Archaeopteryx
+	chown $1 /home/$1/.Archaeopteryx
+
+	mkdir /home/$1/.Trash
+	chown $1 /home/$1/.Trash
+
+	install_file lib.sh $1
+	install_file config.sh $1
+	echo 'TRASH=~/.Trash' >> /home/$1/.Archaeopteryx/config.sh
+	echo $1 >> /etc/cron.allow
+}
+
+setup_notify(){
 	echo 'Enter email user name:'
 	read email
 	readpass password 'Enter email password:'
-
-	echo "writing /home/$ARCHAEOPTERYX_USER/.msmtprx"
 	echo "defaults
 tls on
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
@@ -62,33 +51,29 @@ account default : gmail" > $ARCHAEOPTERYX_HOME/.msmtprc
 	chown $ARCHAEOPTERYX_USER $ARCHAEOPTERYX_HOME/.msmtprc
 	chmod 600 $ARCHAEOPTERYX_HOME/.msmtprc
 
-	echo 'Saving notify email variable...'
-	echo "export NOTIFY_EMAIL=$email" >> $ARCHAEOPTERYX_BIN/profile
-	echo 'Notify email saved'
+	echo "export NOTIFY_EMAIL=$email" >> /home/$1/.Archaeopteryx/config.sh
+
+	crontab -u $1 schedule.crt
 }
 
-setup_crontab(){
-	echo 'Setting up crontab...'
-	install -o $ARCHAEOPTERYX_USER -g $ARCHAEOPTERYX_USER -m 500 on_reboot.sh $ARCHAEOPTERYX_BIN
-	echo $ARCHAEOPTERYX_USER >> /etc/cron.allow
-	crontab -u $ARCHAEOPTERYX_USER schedule.crt
-	echo 'Crontab set'
+install_root(){
+	mkdir /root/.Archaeopteryx
+	chown $1 /root/.Archaeopteryx
+
+	mkdir /root/.Trash
+	chown $1 /root/.Trash
+	install_file_root lib.sh
+	install_file_root config.sh
+	echo 'TRASH=~/.Trash' >> /root/.Archaeopteryx/config.sh
 }
 
-setup_root(){
-	apt -y install clamav
-	cp $ARCHAEOPTERYX_BIN /root
-	chown root /root/.Archaeopteryx
-	echo ". /root/.Archaeopteryx/profile" >> /root/.profile
-	install -o root -g root -m 500 maintenance.sh /root/.Archaeopteryx
+setup_maintenance(){
 	crontab -u root schedule_root.crt
 }
 
-echo 'Starting Archaeopteryx installation...'
-setup_user
-install_archaeolib
-install_msmtp
-setup_crontab
-setup_root
-echo 'Archaeopteryx installation complete'
+dependencies
+install_system archaeopteryx
+setup_notify archaeopteryx
+install_root
+setup_maintenance
 

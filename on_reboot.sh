@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/.profile
+. ~/.Archaeopteryx/lib.sh
 
 TIME=$(tstmp)
 

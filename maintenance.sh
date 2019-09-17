@@ -1,6 +1,6 @@
 #!/bin/sh
 
-. ~/.profile
+. ~/.Archaeopteryx/lib.sh
 
 WARNING_MESG='System maintenance will begin in'
 LOG_DIR='/var/log/Archaeopteryx/'
