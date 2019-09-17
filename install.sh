@@ -15,7 +15,7 @@ install_file_root(){
 }
 
 install_system(){
-	! id $1 >/dev/null
+	id $1 >/dev/null 2>/dev/null
 	if [ $? -ne 0 ]
 	then
 		adduser $1
