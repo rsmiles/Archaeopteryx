@@ -59,10 +59,10 @@ account default : gmail" > /home/$1/.msmtprc
 
 install_root(){
 	mkdir /root/.Archaeopteryx
-	chown $1 /root/.Archaeopteryx
+	chown root /root/.Archaeopteryx
 
 	mkdir /root/.Trash
-	chown $1 /root/.Trash
+	chown root /root/.Trash
 	install_file_root lib.sh
 	install_file_root config.sh
 	echo 'TRASH=~/.Trash' >> /root/.Archaeopteryx/config.sh
