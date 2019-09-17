@@ -28,7 +28,7 @@ install_system(){
 
 	install_file lib.sh $1
 	install_file config.sh $1
-	echo 'TRASH=~/.Trash' >> /home/$1/.Archaeopteryx/config.sh
+	echo 'export TRASH=~/.Trash' >> /home/$1/.Archaeopteryx/config.sh
 	echo $1 >> /etc/cron.allow
 }
 
@@ -65,7 +65,7 @@ install_root(){
 	chown root /root/.Trash
 	install_file_root lib.sh
 	install_file_root config.sh
-	echo 'TRASH=~/.Trash' >> /root/.Archaeopteryx/config.sh
+	echo 'export TRASH=~/.Trash' >> /root/.Archaeopteryx/config.sh
 }
 
 setup_maintenance(){
