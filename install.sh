@@ -7,11 +7,24 @@ dependencies(){
 }
 
 install_file(){
-	install -o $2 -g $2 -m 644 $1 /home/$2/.Archaeopteryx/
+	if [ -z "$3" ]
+	then
+		PERMS=644
+	else
+		PERMS=$3
+	fi
+
+	install -o $2 -g $2 -m $PERMS $1 /home/$2/.Archaeopteryx/
 }
 
 install_file_root(){
-	install -o root -g root -m 644 $1 /root/.Archaeopteryx/
+	if [ -z "$3" ]
+	then
+		PERMS=644
+	else
+		PERMS=$3
+	fi
+	install -o root -g root -m $PERMS $1 /root/.Archaeopteryx/
 }
 
 install_system(){
@@ -20,6 +33,7 @@ install_system(){
 	then
 		adduser $1
 	fi
+	usermod -a -G syslog $1
 	mkdir /home/$1/.Archaeopteryx
 	chown $1 /home/$1/.Archaeopteryx
 
@@ -55,8 +69,7 @@ account default : gmail" > /home/$1/.msmtprc
 	echo "export NOTIFY_EMAIL=$email" >> /home/$1/.Archaeopteryx/config.sh
 
 	crontab -u $1 schedule.crt
-	install_file on_reboot.sh $1
-	chmod u+x /home/$1/.Archaeopteryx/on_reboot.sh
+	install_file on_reboot.sh $1 500
 }
 
 install_root(){
@@ -73,7 +86,7 @@ install_root(){
 
 setup_maintenance(){
 	crontab -u root schedule_root.crt
-	install_file_root maintenance.sh
+	install_file_root maintenance.sh 500
 	chmod u+x /root/.Archaeopteryx/maintenance.sh
 }
 
