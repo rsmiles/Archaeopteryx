@@ -4,6 +4,7 @@
 
 WARNING_MESG='System maintenance will begin in'
 LOG_DIR='/var/log/Archaeopteryx/'
+KEEP_LOGS=30
 
 wall "$WARNING_MESG 1 hour"
 
@@ -32,6 +33,12 @@ then
 	mkdir $LOG_DIR
 	chown $LOG_DIR archaeopteryx
 	chmod 440 $LOG_DIR
+fi
+
+# If our number of log files is over KEEP_LOGS, then delete the oldest one
+if [ $(ls -1 $LOG_DIR | wc -1) -gt $KEEP_LOGS ]
+then
+	rm $(ls $LOG_DIR | sort | head -n 1)
 fi
 
 TIME=$(tstmp)
