@@ -2,9 +2,14 @@
 
 . ~/.Archaeopteryx/lib.sh
 
+KEEP_TRASH=100
 WARNING_MESG='System maintenance will begin in'
 LOG_DIR='/var/log/Archaeopteryx/'
 KEEP_LOGS=30
+
+count_files(){
+	ls -1 $1 | wc -1
+}
 
 wall "$WARNING_MESG 1 hour"
 
@@ -28,6 +33,12 @@ sleep 1m
 
 wall 'Starting system maintenance. System restart will occur at the end.'
 
+# Empty trash if it has more than KEEP_TRASH items in it
+if [ $(count_files $TRASH) -ge $KEEP_TRASH ]
+then
+	rmtrash
+fi
+
 if [ ! -d $LOG_DIR ]
 then
 	mkdir $LOG_DIR
@@ -35,10 +46,10 @@ then
 	chmod 440 $LOG_DIR
 fi
 
-# If our number of log files is over KEEP_LOGS, then delete the oldest one
-if [ $(ls -1 $LOG_DIR | wc -1) -gt $KEEP_LOGS ]
+# If our number of log files is over KEEP_LOGS, then trash the oldest one
+if [ $(count_files $LOG_DIR) -gt $KEEP_LOGS ]
 then
-	rm $(ls $LOG_DIR | sort | head -n 1)
+	trash $(ls $LOG_DIR | sort | head -n 1)
 fi
 
 TIME=$(tstmp)
