@@ -79,7 +79,7 @@ install_root(){
 	chown root /root/.Trash
 	install_file_root lib.sh
 	install_file_root config.sh
-	echo 'export TRASH=~/.Trash' >> /root/.Archaeopteryx/config.sh
+	echo 'export TRASH=/root/.Trash' >> /root/.Archaeopteryx/config.sh
 }
 
 setup_maintenance(){
