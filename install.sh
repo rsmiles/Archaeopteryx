@@ -33,7 +33,6 @@ install_system(){
 	then
 		adduser $1
 	fi
-	usermod -a -G syslog $1
 	mkdir /home/$1/.Archaeopteryx
 	chown $1 /home/$1/.Archaeopteryx
 

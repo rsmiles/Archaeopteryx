@@ -28,5 +28,5 @@ fi
 notify "$(hostname) Reboot" "$(hostname) reboot completed at $TIME.
 $ADDRESSES
 
-$(cat $LOG_MESG)"
+$LOG_MESG"
 

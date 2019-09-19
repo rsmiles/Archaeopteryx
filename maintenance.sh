@@ -8,28 +8,28 @@ LOG_DIR='/var/log/Archaeopteryx/'
 KEEP_LOGS=30
 
 count_files(){
-	ls -1 $1 | wc -1
+	ls $1 | wc -l
 }
 
 wall "$WARNING_MESG 1 hour"
 
-sleep 30m
+#sleep 30m
 
 wall "$WARNING_MESG 30 minutes"
 
-sleep 20m
+#sleep 20m
 
 wall "$WARNING_MESG 10 minutes"
 
-sleep 5m
+#sleep 5m
 
 wall "$WARNING_MESG 5 minutes"
 
-sleep 4m
+#sleep 4m
 
 wall "$WARNING_MESG 1 minute"
 
-sleep 1m
+#sleep 1m
 
 wall 'Starting system maintenance. System restart will occur at the end.'
 
@@ -58,8 +58,9 @@ touch $LOG_FILE
 chown archaeopteryx $LOG_FILE
 chmod 750 $LOG_FILE
 
-apt-get -qq update >> $LOG_FILE 2>> $LOG_FILE
-apt-get -qq upgrade >> $LOG_FILE 2>> $LOG_FILE
+apt-get -y -qq update >> $LOG_FILE 2>> $LOG_FILE
+apt-get -y -qq upgrade >> $LOG_FILE 2>> $LOG_FILE
 
-shutdown -r +30
+#shutdown -r +5
+shutdown -r now
 
