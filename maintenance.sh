@@ -42,8 +42,8 @@ fi
 if [ ! -d $LOG_DIR ]
 then
 	mkdir $LOG_DIR
-	chown $LOG_DIR archaeopteryx
-	chmod 440 $LOG_DIR
+	chown archaeopteryx: $LOG_DIR
+	chmod 750 $LOG_DIR
 fi
 
 # If our number of log files is over KEEP_LOGS, then trash the oldest one
@@ -56,7 +56,7 @@ TIME=$(tstmp)
 LOG_FILE="$LOG_DIR"/"$TIME".log
 touch $LOG_FILE
 chown archaeopteryx $LOG_FILE
-chmod 440 $LOG_FILE
+chmod 750 $LOG_FILE
 
 apt-get -qq update >> $LOG_FILE 2>> $LOG_FILE
 apt-get -qq upgrade >> $LOG_FILE 2>> $LOG_FILE
