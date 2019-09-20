@@ -58,9 +58,6 @@ touch $LOG_FILE
 chown archaeopteryx $LOG_FILE
 chmod 750 $LOG_FILE
 
-freshclam --quiet >>$LOG_FILE 2>>$LOG_FILE
-clamscan -r -i / >>$LOG_FILE 2>>$LOG_FILE
-
 apt-get -y -qq update >>$LOG_FILE 2>>$LOG_FILE
 apt-get -y -qq upgrade >>$LOG_FILE 2>>$LOG_FILE
 
