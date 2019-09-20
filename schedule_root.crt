@@ -1,2 +1,2 @@
-0 23 * * * ~/.Archaeopteryx/maintenance.sh
+0 23 * * * /root/.Archaeopteryx/maintenance.sh
 
