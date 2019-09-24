@@ -61,5 +61,5 @@
 #apt-get -y -qq update >>$LOG_FILE 2>>$LOG_FILE
 #apt-get -y -qq upgrade >>$LOG_FILE 2>>$LOG_FILE
 
-shutdown -r now
+shutdown -r +5
 
