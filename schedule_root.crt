@@ -1,2 +1,2 @@
-@daily /root/.Archaeopteryx/maintenance.sh
+@daily ~/.Archaeopteryx/maintenance.sh
 

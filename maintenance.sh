@@ -4,7 +4,7 @@
 
 #KEEP_TRASH=100
 #WARNING_MESG='System maintenance will begin in'
-#LOG_DIR='/var/log/Archaeopteryx/'
+LOG_DIR='/var/log/Archaeopteryx/'
 #KEEP_LOGS=30
 
 #count_files(){
@@ -39,12 +39,19 @@
 #	rmtrash
 #fi
 
-#if [ ! -d $LOG_DIR ]
-#then
-#	mkdir $LOG_DIR
-#	chown archaeopteryx: $LOG_DIR
-#	chmod 750 $LOG_DIR
-#fi
+maintenance(){
+	#apt-get -qq update
+	#apt-get -qq upgrade
+
+	shutdown -r +5
+}
+
+if [ ! -d $LOG_DIR ]
+then
+	mkdir $LOG_DIR
+	chown archaeopteryx: $LOG_DIR
+	chmod 750 $LOG_DIR
+fi
 
 # If our number of log files is over KEEP_LOGS, then trash the oldest one
 #if [ $(count_files $LOG_DIR) -gt $KEEP_LOGS ]
@@ -52,14 +59,11 @@
 #	trash $(ls $LOG_DIR | sort | head -n 1)
 #fi
 
-#TIME=$(tstmp)
-#LOG_FILE="$LOG_DIR"/"$TIME".log
-#touch $LOG_FILE
-#chown archaeopteryx $LOG_FILE
-#chmod 750 $LOG_FILE
+TIME=$(tstmp)
+LOG_FILE="$LOG_DIR"/"$TIME".log
+touch $LOG_FILE
+chown archaeopteryx $LOG_FILE
+chmod 750 $LOG_FILE
 
-#apt-get -y -qq update >>$LOG_FILE 2>>$LOG_FILE
-#apt-get -y -qq upgrade >>$LOG_FILE 2>>$LOG_FILE
-
-shutdown -r +5
+maintenance >>$LOG_FILE  2>>$LOG_FILE
 
