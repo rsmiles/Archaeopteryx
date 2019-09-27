@@ -125,19 +125,20 @@ readpass(){
 		then
 			echo $2
 		else
-			echo -n 'Enter password:'
+			echo -n 'Enter password: '
 		fi
 		read _password
-
+		echo
 		
 		if [ ! -z "$3" ]
 		then
 			echo $3
 		else
-			echo -n 'Re-enter password:'
+			echo -n 'Re-enter password: '
 
 		fi
 		read _password2
+		echo
 
 		if [ $_password = $_password2 ]
 		then
