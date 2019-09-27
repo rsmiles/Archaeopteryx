@@ -43,7 +43,8 @@ maintenance(){
 	#apt-get -qq update
 	#apt-get -qq upgrade
 
-	shutdown -r +5
+	echo '==== Shutdown ===='
+	/sbin/shutdown -r +5
 }
 
 if [ ! -d $LOG_DIR ]
