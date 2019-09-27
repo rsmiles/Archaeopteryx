@@ -123,7 +123,7 @@ readpass(){
 	do
 		if [ ! -z "$2" ]
 		then
-			echo $2
+			echo -n "$2 "
 		else
 			echo -n 'Enter password: '
 		fi
@@ -132,7 +132,7 @@ readpass(){
 		
 		if [ ! -z "$3" ]
 		then
-			echo $3
+			echo -n "$3 "
 		else
 			echo -n 'Re-enter password: '
 
