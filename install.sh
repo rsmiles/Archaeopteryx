@@ -46,7 +46,7 @@ install_system(){
 }
 
 setup_notify(){
-	echo 'Enter email user name:'
+	echo -n 'Enter email user name:'
 	read email
 	readpass password 'Enter email password:'
 	echo "defaults

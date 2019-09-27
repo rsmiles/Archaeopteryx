@@ -92,7 +92,7 @@ sdfmt(){
 	dev=$1
 	name=$2
 
-	echo "WARNING: This will erase all data on $dev. Enter 'yes' to continue, enter any other value to exit"
+	echo -n "WARNING: This will erase all data on $dev. Enter 'yes' to continue, enter any other value to exit"
 
 	read input
 	if [ $input != 'yes' ]
@@ -125,25 +125,25 @@ readpass(){
 		then
 			echo $2
 		else
-			echo 'Enter password:'
+			echo -n 'Enter password:'
 		fi
-		read __archaeolib_password
+		read _password
 
 		
 		if [ ! -z "$3" ]
 		then
 			echo $3
 		else
-			echo 'Re-enter password:'
+			echo -n 'Re-enter password:'
 
 		fi
-		read __archaeolib_password2
+		read _password2
 
-		if [ $__archaeolib_password = $__archaeolib_password2 ]
+		if [ $_password = $_password2 ]
 		then
-			eval "$1=$__archaeolib_password"
-			unset __archaeolib_password
-			unset __archaeolib_password2
+			eval "$1=$_password"
+			unset _password
+			unset _password2
 			break
 		fi
 
@@ -151,7 +151,7 @@ readpass(){
 		then
 			echo $4
 		else
-			echo 'Passwords do not match. Try Again.'
+			echo -n 'Passwords do not match. Try Again.'
 		fi
 	done
 	stty echo
