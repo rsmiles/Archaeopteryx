@@ -48,7 +48,6 @@ install_system(){
 setup_notify(){
 	echo -n 'Enter email user name: '
 	read email
-	echo
 	readpass password 'Enter email password:'
 	echo "defaults
 tls on

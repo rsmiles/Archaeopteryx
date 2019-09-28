@@ -40,10 +40,11 @@ LOG_DIR='/var/log/Archaeopteryx/'
 #fi
 
 maintenance(){
-	#apt-get -qq update
-	#apt-get -qq upgrade
-
-	echo '==== Shutdown ===='
+	echo ==== apt-get update ====
+	apt-get -qq update
+	echo ==== apt-get upgrade ====
+	apt-get -qq upgrade
+	echo ==== shutdown ====
 	/sbin/shutdown -r +5
 }
 
