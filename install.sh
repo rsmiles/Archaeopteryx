@@ -4,6 +4,7 @@
 
 dependencies(){
 	apt-get -y install msmtp clamav
+	killall freshclam
 }
 
 install_file(){
