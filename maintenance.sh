@@ -20,6 +20,8 @@ maintenance(){
 	freshclam --quiet
 	echo ==== clamscan ====
 	clamscan -i -r --stdout /
+	echo ==== Finished ====
+	echo "Maintenance finished at $(tstmp)"
 }
 
 # Empty trash if it has more than KEEP_TRASH items in it
