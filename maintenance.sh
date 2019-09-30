@@ -16,10 +16,6 @@ maintenance(){
 	apt-get -qq update
 	echo ==== apt-get upgrade ====
 	apt-get -qq upgrade
-	echo ==== freshclam ====
-	freshclam --quiet
-	echo ==== clamscan ====
-	clamscan -i -r --stdout /
 	echo ==== Finished ====
 	echo "Maintenance finished at $(tstmp)"
 }
