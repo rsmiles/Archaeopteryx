@@ -3,7 +3,7 @@
 . ./lib.sh
 
 dependencies(){
-	apt-get -y install msmtp
+	apt-get -y install msmtp clamav
 }
 
 install_file(){

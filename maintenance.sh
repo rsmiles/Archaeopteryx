@@ -16,13 +16,11 @@ maintenance(){
 	apt-get -qq update
 	echo ==== apt-get upgrade ====
 	apt-get -qq upgrade
-	echo ==== shutdown ====
-	/sbin/shutdown -r +5
+	echo ==== freshclam ====
+	freshclam --quiet
+	echo ==== clamscan ====
+	clamscan -i -r --stdout /
 }
-
-#wall 'System maintenance will begin in 10 minutes'
-#sleep 10m
-wall 'Starting system maintenance. System restart will occur at the end.'
 
 # Empty trash if it has more than KEEP_TRASH items in it
 if [ $(count_files $TRASH) -ge $KEEP_TRASH ]

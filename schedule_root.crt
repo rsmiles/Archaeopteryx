@@ -1,2 +1,4 @@
-@daily ~/.Archaeopteryx/maintenance.sh
+# mi ho dm mo dw
+   0  0  *  *  *  /sbin/shutdown -r +10
+  30  0  *  *  *  ~/.Archaeopteryx/maintenance.sh
 
