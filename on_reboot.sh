@@ -22,7 +22,7 @@ then
 	LOG_MESG='No maintenance logs available'
 else
 	LOG_MESG="Last maintenance log:
-$(cat $LOG_FILE)"
+$(cat $LOG_DIR/$LOG_FILE)"
 fi
 
 notify "$(hostname) Reboot" "$(hostname) reboot completed at $TIME.
