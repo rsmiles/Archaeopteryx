@@ -3,8 +3,7 @@
 . ./lib.sh
 
 dependencies(){
-	apt-get -y install msmtp clamav
-	killall freshclam
+	apt-get -y install msmtp
 }
 
 install_file(){
