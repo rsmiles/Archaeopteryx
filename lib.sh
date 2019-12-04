@@ -58,8 +58,9 @@ trash(){
 	done
 }
 
-# cleanup
-# Remove files that are older than a certain date
+# cleanup [-r|--remove] dir days
+# Remove files and directories in dir that are older than the number of days specified by days.
+# Uses trash command to remove them by default, but will use 'rm -r' if the -r or --remove flag is given.
 cleanup(){
 	CLEANUP_PROG='trash'
 	if [ $# -gt 3 -o $# -lt 2 ]
@@ -195,5 +196,30 @@ $2" | msmtp $NOTIFY_EMAIL
 ips(){
 	echo "Internal_IP:	$(hostname -I | cut -d ' ' -f 1)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
 	echo "External_IP:	$(curl -s http://whatismyip.akamai.com/)" | grep -E '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+'
+}
+
+# backup
+# Uses rsync to backup files in BACKUP_SRC to BACKUP_DEST.
+# BACKUP_SRC and BACKUP_DEST can be any location accepted by rsync.
+backup(){
+	if [ -z "$BACKUP_SRC" ]
+	then
+		echo 'backup: BACKUP_SRC not set' >&2
+		return 1
+	fi
+
+	if [ -z "$BACKUP_DEST" ]
+	then
+		echo 'backup: BACKUP_DEST not set' >&2
+		return 1
+	fi
+
+	rsync -av "$BACKUP_SRC" "$BACKUP_DEST"
+	if [ $? -ne 0 ]
+	then
+		echo 'backup error'
+		return 1
+	fi
+	echo 'backup complete'
 }
 
