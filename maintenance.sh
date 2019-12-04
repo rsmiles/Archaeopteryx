@@ -13,13 +13,7 @@ count_files(){
 
 maintenance(){
 	echo ==== trash ====
-	if [ $(count_files $TRASH) -ge $KEEP_TRASH ]
-	then
-		rmtrash
-		echo Emptied
-	else
-		echo Not emptied
-	fi
+	cleanup --remove $TRASH $KEEP_TRASH
 	echo ==== apt-get update ====
 	apt-get -qq update
 	echo ==== apt-get upgrade ====

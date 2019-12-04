@@ -58,16 +58,30 @@ trash(){
 	done
 }
 
-# rmtrash
-# rm all files in the trash directory.
-rmtrash(){
-	if [ -z $TRASH ]
+# cleanup
+# Remove files that are older than a certain date
+cleanup(){
+	CLEANUP_PROG='trash'
+	if [ $# -gt 3 -o $# -lt 2 ]
 	then
-	    echo "rmtrash: Error: TRASH environment variable not set" >&2
-	    return 1
+		echo 'cleanup: usage: [-r|--remove] dir days' >&2
+		return 1
 	fi
 
-	rm $TRASH/*
+	if [ $1 == '-r' -o $1 == '--remove' ]
+	then
+		CLEANUP_PROG='rm -r'
+		shift
+	fi
+
+	SECS_DAY=86400
+	for file in $(ls -A $1)
+	do
+		if [ $(echo "$(date +%s) - $(stat -c %X $file)" | bc) -ge $(echo "$SECS_DAY * $2" | bc) ]
+		then
+			$CLEANUP_PROG $file
+		fi
+	done
 }
 
 # lspart dev
