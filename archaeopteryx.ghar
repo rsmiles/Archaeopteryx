@@ -1,0 +1,32 @@
+# library of functions used in Archaeopteryx system.
+
+(defn tstmp ()
+	($$ (date "+%Y-%m-%d-%H-%M-%S-%N")))
+
+(defn partitions (device)
+	($$ (| (lsblk '-l device) (tr " \t" "\t") (cut '-f 1) (tail '-n '+3))))
+
+(defn sdfmt (device name)
+	(format t "WARNING: This will erase all data on ~a. Enter 'yes' to continue, enter any other value to exit", device)
+	(if (!= (read-line) "yes")
+		(false)
+		(begin
+			(parted device 'mklabel 'msdos)
+			(parted '-a 'opt device 'mkpart 'primary 'fat32 "0%" "100%")
+			(let ([dir ($$ (dirname device))])
+				(let ([partition ($$ (lspart device))])
+					(mkfs.fat '-n name '-F 32 (format nil "~a/~a", dir partition)))))))
+
+(defn notify (subject message)
+	(| (fmt "subject: ~a~%~a" subject message) (msmtp NOTIFY_EMAIL)))
+
+(defn ips ()
+	(list (cons 'internal-ip ($$ (| (hostname '-I) (cut '-d " " '-f 1) (grep '-E "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"))))
+			(cons 'external-ip ($$ (| (curl '-s "http://whatismyip.akamai.com/") (grep '-E "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")=)))))
+
+(defn start-stream (key)
+	(| (raspivid '-o '- '-t 0 '-w 1280 '-h 720 '-fps 25 -b 4000000 '-g 50) 
+		(ffmpeg '-re '-ar 44100 '-ac 2 '-acodec 'pcm_s16le '-f 's16le '-ac 2
+			'-i '/dev/zero '-f 'h264 '-i '- '-vcodec 'copy '-acodec 'aac '-ab '128k
+			'-g 50 '-strict experimental '-f (string-append "flv rtmp://a.rtmp.youtube.com/live2/" key))))
+

@@ -3,7 +3,7 @@
 . ./lib.sh
 
 dependencies(){
-	apt-get -y install msmtp
+	apt-get -y install msmtp ffmpeg
 }
 
 install_file(){
@@ -94,3 +94,4 @@ setup_notify archaeopteryx
 install_root
 setup_maintenance
 echo 'Installation Complete'
+
