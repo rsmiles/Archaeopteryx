@@ -1,0 +1,47 @@
+#!/usr/bin/env gharial
+
+(set user-name "archaeopteryx")
+(set user-home (format nil "/home/~a", user-name))
+(set gharialrc (format nil "~a/.gharialrc", user-home))
+(set lib-dir (format nil "~a/.local/lib/archaeopteryx", user-home))
+(set bin-dir (format nil "~a/.local/bin", user-home))
+
+(defn install-file (file dest)
+	(install '-o user-name '-g user-name -m 555 file dest))
+	
+
+(if (not (to '/dev/null (id user-name)))
+	(begin
+		(adduser user-name)
+		(mkdir lib-dir)
+		(chown user-name lib-dir))
+	nil)
+
+(to+ '/etc/cron.allow
+	(println (format nil "~s~a" user-name)))
+(crontab '-u user-name 'schedule.crt)
+
+(install-file 'archaeopteryx.ghar lib-dir)
+(install-file 'on-reboot.ghar lib-dir)
+(install-file 'maintenance.ghar lib-dir)
+
+(install '-o user-name '-g user-name -m 555 'archaeopteryx.ghar lib-dir)
+
+(set msmtprc-text ($$ (cat 'msmtprc)))
+(set msmtprc-file (format nil "~a/.msmtprc" user-home))
+
+(print "enter email address: ")
+(let ([email (read-line)])
+	(print "enter email password: ")
+	(let ([password (read-password)])
+		(to msmtprc-file
+			(format t msmtprc-text email email password))
+		(to+  gharialrc
+			(formatln t "~%(setenv NOTIFY_EMAIL ~a)" email))))
+
+(chown user-name msmtprc-file)
+(chmod 555 msmtprc-file)
+
+(to+ gharialrc
+	(format nil "~%(load (string-append HOME \"/.local/lib/.archaeopteryx.ghar\))""))
+
