@@ -1,0 +1,4 @@
+#!/usr/bin/env gharial
+
+(deluser '--remove-home 'archaeopteryx)
+

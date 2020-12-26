@@ -4,8 +4,8 @@
 	(if (to '/dev/null (which prog))
 		t
 		(begin
-			(formatln error-file "Required program \"~a\" is not installed. Please install it and run again." prog)
+			(formatln error-file "Required program ""~a"" is not installed. Please install it and run again." prog)
 			f)))
 
-(check-dep 'msmtp)
+(adduser 'archaeopteryx)
 
