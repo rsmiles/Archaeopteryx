@@ -7,5 +7,18 @@
 			(formatln error-file "Required program ""~a"" is not installed. Please install it and run again." prog)
 			f)))
 
-(adduser 'archaeopteryx)
+(set user "archaeopteryx")
+(set home (format nil "/home/~a" user))
+(set lib (format nil "~a/.local/lib/Archaeopteryx" home))
+
+(defn make-dir (dir)
+	(mkdir dir)
+	(chown user dir)
+	(chmod 665 dir))
+
+(adduser user)
+(make-dir (format nil "~a/.local" home))
+(make-dir (format nil "~a/.local/lib" home))
+(make-dir lib)
+
 
