@@ -1,4 +1,8 @@
 #!/usr/bin/env gharial
 
-(deluser '--remove-home 'archaeopteryx)
+(set user "archaeopteryx")
+
+(deluser '--remove-home user)
+
+(to '/etc/cron.allow (| (cat '/etc/cron.allow) (grep '-v user)))
 

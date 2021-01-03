@@ -21,4 +21,5 @@
 (make-dir (format nil "~a/.local/lib" home))
 (make-dir lib)
 
+(to+ '/etc/cron.allow (format t "~%~a" user))
 
