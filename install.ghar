@@ -21,5 +21,6 @@
 (make-dir (format nil "~a/.local/lib" home))
 (make-dir lib)
 
-(to+ '/etc/cron.allow (format t "~%~a~%" user))
+(to+ '/etc/cron.allow (format t "~%~a" user))
+(to '/etc/cron.allow (| (cat '/etc/cron.allow) (grep '-Ev "^$"))) # get rid of extra newlines
 
