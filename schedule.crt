@@ -1,1 +1,1 @@
-@reboot ~/.Archaeopteryx/on_reboot.sh
+@reboot ~/.local/bin/on_reboot.ghar

@@ -7,6 +7,8 @@
 			(formatln error-file "Required program ""~a"" is not installed. Please install it and run again." prog)
 			f)))
 
+(check-dep 'msmtp)
+
 (set user "archaeopteryx")
 (set home (format nil "/home/~a" user))
 (set lib (format nil "~a/.local/lib/Archaeopteryx" home))
@@ -19,8 +21,12 @@
 (adduser user)
 (make-dir (format nil "~a/.local" home))
 (make-dir (format nil "~a/.local/lib" home))
+(make-dir (format nil "~a/.local/bin" home))
 (make-dir lib)
+
+(install '-m 555 on-reboot.ghar (format nil "~a/.local/bin" home))
 
 (to+ '/etc/cron.allow (format t "~%~a" user))
 (to '/etc/cron.allow (| (cat '/etc/cron.allow) (grep '-Ev "^$"))) # get rid of extra newlines
 
+(crontab '-u user 'schedule.crt)
