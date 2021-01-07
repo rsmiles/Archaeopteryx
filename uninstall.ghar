@@ -6,3 +6,5 @@
 
 (to '/etc/cron.allow (| (cat '/etc/cron.allow) (grep '-v user)))
 
+(rm 'msmtprc.format)
+
