@@ -24,6 +24,22 @@
 (make-dir (format nil "~a/.local/bin" home))
 (make-dir lib)
 
+(set password nil)
+(set password2 nil)
+
+(print "Enter gmail address: ")
+(set email (read-line))
+(while (and (!= password nil) (!= password password2))
+	(print "Enter gmail password: ")
+	(set password (read-password))
+	(print "Re-Enter password: ")
+	(set password2 (read-password))
+	(if (!= password password2)
+		(println "Passwords do not match, please try again")
+		nil))
+
+(to (format nil "~a/.msmtprc" home) (format t ($$ (cat msmtprc)) email email password))
+
 (install '-m 555 on-reboot.ghar (format nil "~a/.local/bin" home))
 
 (to+ '/etc/cron.allow (format t "~%~a" user))
