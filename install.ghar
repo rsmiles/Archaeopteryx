@@ -43,7 +43,10 @@
 
 (install '-m 555 on-reboot.ghar (format nil "~a/.local/bin" home))
 
+(install '-m 555 'lib.ghar lib)
+
 (to+ '/etc/cron.allow (format t "~%~a" user))
 (to '/etc/cron.allow (| (cat '/etc/cron.allow) (grep '-Ev "^$"))) # get rid of extra newlines
 
 (crontab '-u user 'schedule.crt)
+

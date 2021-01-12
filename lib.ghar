@@ -1,0 +1,25 @@
+(defn tstmp ()
+	($$ (date "+%Y-%m-%d-%H-%M-%S-%N")))
+
+(defn get-parts (dev)
+	($ (| (lsblk '-l dev) (tr " \t" "\t") (cut '-f 1) (tail '-n '+3))))
+
+(defn sdfmt (dev name)
+	(format t "WARNING: This will erase all data on ~a. Enter ""yes"" to continue, enter any other value to exit")
+	(if (!= (read-line) "yes")
+		nil
+		(begin
+			(parted dev 'mklabel 'msdos)
+			(parted '-a 'opt dev 'mkpart 'primary 'fat32 "0%" "100%")
+			(let ([dir ($$ (dirname dev))] [part ($$ (lspart dev))])
+				(mkfs.fat '-n name '-F 32 (format nil "~a/~a" dir part))))))
+
+(defn notify (subject message)
+	NOTIFY_EMAIL # have error occur if NOTIFY_EMAIL is not set
+	(| (format t "subject: ~a~%~a") (msmtp NOTIFY_EMAIL)))
+
+(defn ips ()
+	(list
+		($$ (| (hostname '-I) (cut '-d " " '-f 1) (grep '-E "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")))
+		($$ (| (curl '-s "http://whatismyip.akamai.com/") (grep '-E "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+")))))
+

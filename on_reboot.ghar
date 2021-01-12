@@ -1,0 +1,11 @@
+#!/user/bin/env gharial
+
+(defn tstmp ()
+	(date "+%Y-%m-%d-%H-%M-%S-%N"))
+
+(defn ips ()
+	)
+
+(defn notify ()
+
+)
