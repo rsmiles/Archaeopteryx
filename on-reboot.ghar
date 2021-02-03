@@ -1,0 +1,12 @@
+#!/user/bin/env gharial
+(load (format nil "~a/.local/lib/Archaeopteryx/lib.ghar") HOME)
+
+(set time (tstmp))
+
+(set addresses (ips))
+(while (!= addresses '("" ""))
+	(sleep 60)
+	(set addresses (ips)))
+
+(notify (format nil "~a Reboot" ($$ (hostname))) (format nil "~a reboot completed at ~a~%Internal IP: ~a~%External IP: " ($$ (hostname)) time) (car addresses) (cadr addresses))
+

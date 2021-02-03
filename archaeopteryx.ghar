@@ -18,6 +18,7 @@
 					(mkfs.fat '-n name '-F 32 (format nil "~a/~a", dir partition)))))))
 
 (defn notify (subject message)
+	NOTIFY_EMAIL
 	(| (fmt "subject: ~a~%~a" subject message) (msmtp NOTIFY_EMAIL)))
 
 (defn ips ()

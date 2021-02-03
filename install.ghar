@@ -8,6 +8,7 @@
 			f)))
 
 (check-dep 'msmtp)
+(check-dep 'ffmpeg)
 
 (set user "archaeopteryx")
 (set home (format nil "/home/~a" user))
@@ -42,6 +43,7 @@
 (install '-m 555 'msmtprc.format (format nil "~a/.msmtprc" home))
 
 (install '-m 555 on-reboot.ghar (format nil "~a/.local/bin" home))
+(install '-m 555 start-stream.ghar (format nil "~a/.local/bin" home))
 
 (install '-m 555 'lib.ghar lib)
 
