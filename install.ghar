@@ -30,7 +30,7 @@
 
 (print "Enter gmail address: ")
 (set email (read-line))
-(while (and (!= password nil) (!= password password2))
+(while (or (= password nil) (!= password password2))
 	(print "Enter gmail password: ")
 	(set password (read-password))
 	(print "Re-Enter password: ")
@@ -39,13 +39,15 @@
 		(println "Passwords do not match, please try again")
 		nil))
 
-(to 'msmtprc.format (format t ($$ (cat msmtprc)) email email password))
+(to 'msmtprc.format (format t ($$ (cat 'msmtprc)) email email password))
+
 (install '-m 555 'msmtprc.format (format nil "~a/.msmtprc" home))
 
-(install '-m 555 on-reboot.ghar (format nil "~a/.local/bin" home))
-(install '-m 555 start-stream.ghar (format nil "~a/.local/bin" home))
+(install '-m 555 'on-reboot.ghar (format nil "~a/.local/bin" home))
+(install '-m 555 'start-stream.ghar (format nil "~a/.local/bin" home))
 
 (install '-m 555 'lib.ghar lib)
+(to+ (format nil "~a/lib.ghar" lib) (formatln t "~%(set NOTIFY_EMAIL ""~a"")" email))
 
 (to+ '/etc/cron.allow (format t "~%~a" user))
 (to '/etc/cron.allow (| (cat '/etc/cron.allow) (grep '-Ev "^$"))) # get rid of extra newlines
